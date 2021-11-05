@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whatsapp API</title>
+</head>
+<body>
+    <div id="app">
+        <h1>Whatssapp API</h1>
+        <p>Powered by taslim</p>
+        <img src="" alt="QR code" id="qrcode">
+        <h3 class="logs"></h3>
+    </div>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.2/socket.io.min.js" integrity="sha512-N5JbZMETkl+0SZh5l8OA2VxSfF120owfQyy54iAXTJIKuqAn3A9TrNz1ypB55o8aSU5MxaodEgv74wGUvgUynQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    $(document).ready(function(){
+        var socket = io.connect('http://localhost:8000', {path: '/socket.io'});
+
+        socket.on('message', function(msg){
+            console.log(msg);
+            $('.logs').append($('<li>').text(msg));
+
+            socket.on('qr', function(src){
+                console.log(src);
+                $("#qrcode").attr('src', src)
+            });
+
+            socket.on('ready', function(){
+                $("#qrcode").hide();
+            })
+
+            socket.on('authenticated', function(){
+                $("#qrcode").hide();
+            })
+        })
+    });
+</script>
+</html>
